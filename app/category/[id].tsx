@@ -4,6 +4,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { njiveImages } from '../../assets/njive';
 
 type Field = {
   id: number;
@@ -48,7 +49,7 @@ export default function CategoryDetailScreen() {
       edges={['top', 'left', 'right']}
     >
     {/* Top bar */}
-    <View className={`bg-green-800 border-b border-white ${isLandscape ? 'px-6 py-2.0' : 'px-4 py-2.5'}`}>
+    <View className={`bg-green-800 border-b border-white ${isLandscape ? 'px-6 py-2.5' : 'px-4 py-2.5'}`}>
       <View className="flex-row items-center justify-between self-center w-full max-w-screen-lg">
         {/* Leva strana - Back button i Ime */}
         <View className="flex-row items-center flex-1">
@@ -104,14 +105,24 @@ export default function CategoryDetailScreen() {
         ) : (
           <View className={`flex-row flex-wrap justify-center ${isLandscape ? 'gap-5' : 'gap-4'}`}>
             {data.map((field: Field) => (
-              <View
+              <TouchableOpacity
                 key={field.id}
+                activeOpacity={0.8}
+                onPress={() => router.push({
+                  pathname: '/field/[id]',
+                  params: {
+                    category: name,
+                    id: field.id,
+                    name: field.naziv,
+                    slika: field.slika
+                  }
+                })}
                 className={`rounded-2xl overflow-hidden shadow-lg shadow-black/50 bg-white border border-black ${isLandscape ? 'w-[200px]' : 'w-[180px]'}`}
               >
                 {/* Gornji deo - Slika */}
                 <View className={`items-center justify-center bg-green-800 ${isLandscape ? 'h-[173px]' : 'h-[126px]'}`}>
                 <Image
-                  source={require('../../assets/farma/brdo_donji_deo.png')} // field.slika
+                  source={njiveImages[field.slika]}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -137,7 +148,7 @@ export default function CategoryDetailScreen() {
                     </Text>
                   ) : null}
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         )}

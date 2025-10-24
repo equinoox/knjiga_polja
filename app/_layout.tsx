@@ -23,7 +23,6 @@ export default function RootLayout() {
   const rollback = async (db: SQLiteDatabase) => {
     try {
       await rollbackTables(db);
-      console.log("Database!");
     } catch (error) {
       console.log(error);
     }
@@ -34,8 +33,9 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="home" options={{ headerShown: false }} />
         <Stack.Screen name="category/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="field/[id]" options={{ headerShown: false }} />
       </Stack>
-      <StatusBar style="light" backgroundColor="#1f2937" />
+      <StatusBar backgroundColor="#ffffff" />
     </SQLiteProvider>
   );
 }

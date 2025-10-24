@@ -66,21 +66,328 @@ export const addFarmingFieldCategory = async (db: SQLiteDatabase) => {
       `);
     }
 
-    console.log("Kategorije uspešno dodate (ako su nedostajale).");
+    console.log("Kategorije uspešno dodate.");
+    addFarmingFieldFarma(db);
+    addFarmingFieldKanal(db);
+    addFarmingFieldPadina(db);
+    addFarmingFieldPustara(db);
+    addFarmingFieldVojska(db);
+    addFarmingFieldStadion(db);
+
   } catch (error) {
     console.error("Greška pri dodavanju kategorija njiva:", error);
   }
 };
 
-// export const addFramingField1 = async  (db: SQLiteDatabase) => {
-//   try{
-//     console.log("Adding Farming Fields...")
-//     await db.execAsync(`
-//       INSERT INTO njive (naziv, opis, slika, kategorija_id) 
-//       VALUES ('Njiva 1', 'Opis prve njive', 'slika1.png', 1);
-//     `);
 
-//   } catch (error){
-//     console.error("Greska pri dodavanju njiva.")
-//   }
-// }
+export const addFarmingFieldFarma = async (db: SQLiteDatabase) => {
+  try {
+    const fields = [
+      {
+        naziv: 'Brdo Donji Deo',
+        opis: 'Brdo',
+        slika: 'brdo_donji_deo',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Brdo Gornji Deo',
+        opis: 'Brdo',
+        slika: 'brdo_gornji_deo',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Dupla Duž 1',
+        opis: 'Duž',
+        slika: 'dupla_duz_1',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Dupla Duž 2',
+        opis: 'Duž',
+        slika: 'dupla_duz_2',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Džep',
+        opis: 'Džep',
+        slika: 'dzep',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Iza Farme 1',
+        opis: 'Iza Farme',
+        slika: 'iza_farme_1',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Iza Farme 2',
+        opis: 'Iza Farme',
+        slika: 'iza_farme_2',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Iza Farme 3',
+        opis: 'Iza Farme',
+        slika: 'iza_farme_3',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Između Kanala',
+        opis: 'Iza Farme',
+        slika: 'izmedju_kanala',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Iznad Smilja',
+        opis: 'Smilje',
+        slika: 'iznad_smilja',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Kudeljara',
+        opis: 'Kudeljara',
+        slika: 'kudeljara',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Špic kod Kudeljare',
+        opis: 'Smilje',
+        slika: 'spic_kod_kudeljare',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Preko puta Smilja',
+        opis: 'Smilja',
+        slika: 'preko_puta_smilja',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Prizme',
+        opis: 'Prizme',
+        slika: 'prizme',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Smilje',
+        opis: 'Smilje',
+        slika: 'smilje',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Špic na Brdu 1',
+        opis: 'Špic na Brdu',
+        slika: 'spic_na_brdu_1',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Špic na Brdu 2',
+        opis: 'Špic na Brdu',
+        slika: 'spic_na_brdu_2',
+        kategorija_id: 1
+      },
+      {
+        naziv: 'Vaga',
+        opis: 'Vaga',
+        slika: 'vaga',
+        kategorija_id: 1
+      },
+    ];
+
+    for (const field of fields) {
+      const exists = await db.getAllAsync(
+        'SELECT id FROM njive WHERE naziv = ?',
+        [field.naziv]
+      );
+
+      if (exists.length === 0) {
+        await db.runAsync(
+          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.kategorija_id]
+        );
+      }
+    }
+  } catch (error) {
+    console.error('Greška pri dodavanju njiva:', error);
+    throw error;
+  }
+};
+
+export const addFarmingFieldKanal = async (db: SQLiteDatabase) => {
+  try {
+    const fields = [
+      {
+        naziv: 'Kanal Donji Deo',
+        opis: 'Kanal',
+        slika: 'kanal_donji_deo',
+        kategorija_id: 2
+      },
+      {
+        naziv: 'Kanal Gornji Deo',
+        opis: 'Kanal',
+        slika: 'kanal_gornji_deo',
+        kategorija_id: 2
+      }
+    ];
+
+    for (const field of fields) {
+      const exists = await db.getAllAsync(
+        'SELECT id FROM njive WHERE naziv = ?',
+        [field.naziv]
+      );
+
+      if (exists.length === 0) {
+        await db.runAsync(
+          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.kategorija_id]
+        );
+      }
+    }
+  } catch (error) {
+    console.error('Greška pri dodavanju njiva:', error);
+    throw error;
+  }
+};
+
+export const addFarmingFieldPadina = async (db: SQLiteDatabase) => {
+  try {
+    const fields = [
+      {
+        naziv: 'Padina',
+        opis: 'Padina',
+        slika: 'padina',
+        kategorija_id: 3
+      },
+    ];
+
+    for (const field of fields) {
+      const exists = await db.getAllAsync(
+        'SELECT id FROM njive WHERE naziv = ?',
+        [field.naziv]
+      );
+
+      if (exists.length === 0) {
+        await db.runAsync(
+          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.kategorija_id]
+        );
+      }
+    }
+  } catch (error) {
+    console.error('Greška pri dodavanju njiva:', error);
+    throw error;
+  }
+};
+
+export const addFarmingFieldPustara = async (db: SQLiteDatabase) => {
+  try {
+    const fields = [
+      {
+        naziv: 'Pustara Donji Deo',
+        opis: 'Pustara',
+        slika: 'pustara_donji_deo',
+        kategorija_id: 4
+      },
+      {
+        naziv: 'Pustara Gornji Deo',
+        opis: 'Pustara',
+        slika: 'pustara_gornji_deo',
+        kategorija_id: 4
+      },
+      {
+        naziv: 'Pustara Špic',
+        opis: 'Pustara',
+        slika: 'pustara_spic',
+        kategorija_id: 4
+      }
+    ];
+
+    for (const field of fields) {
+      const exists = await db.getAllAsync(
+        'SELECT id FROM njive WHERE naziv = ?',
+        [field.naziv]
+      );
+
+      if (exists.length === 0) {
+        await db.runAsync(
+          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.kategorija_id]
+        );
+      }
+    }
+  } catch (error) {
+    console.error('Greška pri dodavanju njiva:', error);
+    throw error;
+  }
+};
+
+export const addFarmingFieldVojska = async (db: SQLiteDatabase) => {
+  try {
+    const fields = [
+      {
+        naziv: 'Vojska Donji Deo',
+        opis: 'Donji deo parcele Vojska',
+        slika: 'vojska_donji_deo',
+        kategorija_id: 5
+      },
+      {
+        naziv: 'Vojska Gornji Deo',
+        opis: 'Gornji deo parcele Vojska',
+        slika: 'vojska_gornji_deo',
+        kategorija_id: 5
+      }
+    ];
+
+    for (const field of fields) {
+      const exists = await db.getAllAsync(
+        'SELECT id FROM njive WHERE naziv = ?',
+        [field.naziv]
+      );
+
+      if (exists.length === 0) {
+        await db.runAsync(
+          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.kategorija_id]
+        );
+      }
+    }
+  } catch (error) {
+    console.error('Greška pri dodavanju njiva:', error);
+    throw error;
+  }
+};
+
+export const addFarmingFieldStadion = async (db: SQLiteDatabase) => {
+  try {
+    const fields = [
+      {
+        naziv: 'Stadion 1',
+        opis: 'Stadion',
+        slika: 'stadion_1',
+        kategorija_id: 6
+      },
+      {
+        naziv: 'Stadion 2',
+        opis: 'Stadion',
+        slika: 'stadion_2',
+        kategorija_id: 6
+      }
+    ];
+
+    for (const field of fields) {
+      const exists = await db.getAllAsync(
+        'SELECT id FROM njive WHERE naziv = ?',
+        [field.naziv]
+      );
+
+      if (exists.length === 0) {
+        await db.runAsync(
+          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.kategorija_id]
+        );
+      }
+    }
+  } catch (error) {
+    console.error('Greška pri dodavanju njiva:', error);
+    throw error;
+  }
+};

@@ -49,22 +49,23 @@ export default function HomeScreen() {
       edges={['top', 'left', 'right']}
     >
       {/* Top bar */}
-      <View className={`bg-green-800 border-b border-white ${isLandscape ? 'px-6 py-2.0' : 'px-4 py-2.5'}`}>
+      <View className={`bg-green-800 border-b border-white ${isLandscape ? 'px-6 py-2.5' : 'px-4 py-2.5'}`}>
         <View className="flex-row items-center justify-between self-center w-full max-w-screen-lg">
           {/* Leva strana - Ikonica i Ime */}
           <View className="flex-row items-center flex-1">
             {/* Ikonica */}
             <View
-              className={`items-center justify-center rounded-full mr-6 bg-white ${
+              className={`items-center justify-center rounded-full mr-16 bg-white ${
                 isLandscape ? 'w-[42px] h-[32px]' : 'w-12 h-12'
               }`}
             >
             <Image
               source={require('../assets/finagro_logo.png')}
               style={{
-                width: 100,
-                height: 40,
+                width: 120,
+                height: 60,
                 resizeMode: 'contain',
+                marginLeft: 40
               }}
             />
             </View>
