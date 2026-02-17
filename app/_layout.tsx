@@ -3,7 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
-import { addFarmingFieldCategory, createTables, rollbackTables } from '../db/dbController';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { addFarmingFieldCategory, backfillPripadnost, createTables, migrateHemijeCena, rollbackTables } from '../db/dbController';
 
 import "../global.css";
 
@@ -14,6 +15,8 @@ export default function RootLayout() {
       await createTables(db);
       console.log("Database loaded successfully!");
       await addFarmingFieldCategory(db);
+      await backfillPripadnost(db);
+      await migrateHemijeCena(db);
 
     } catch (error) {
       console.log(error);
@@ -30,12 +33,19 @@ export default function RootLayout() {
 
   return (
     <SQLiteProvider databaseName="finagro.db" onInit={createDbIfNeeded}>
+      <SafeAreaProvider>
       <Stack>
         <Stack.Screen name="home" options={{ headerShown: false }} />
         <Stack.Screen name="category/[id]" options={{ headerShown: false }} />
         <Stack.Screen name="field/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="operations/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="prihodi/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="rashodi/[id]" options={{ headerShown: false }} />
+        <Stack.Screen name="pripadnosti" options={{ headerShown: false }} />
+        <Stack.Screen name="magacin" options={{ headerShown: false }} />
       </Stack>
-      <StatusBar backgroundColor="#ffffff" />
+      <StatusBar backgroundColor="#166534" style="light" />
+      </SafeAreaProvider>
     </SQLiteProvider>
   );
 }

@@ -5,12 +5,15 @@ import { useCallback, useState } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { njiveImages } from '../../assets/njive';
+import MagacinButton from '../../components/magacin-button';
 
 type Field = {
   id: number;
   naziv: string;
   opis: string;
   slika: string;
+  velicina: number;
+  pripadnost: string;
   kategorija_id: number;
 };
 
@@ -72,6 +75,14 @@ export default function CategoryDetailScreen() {
 
         {/* Desna strana - Dugmad i Datum */}
         <View className="flex-row items-center">
+          <MagacinButton isLandscape={isLandscape} />
+          <TouchableOpacity
+            onPress={() => router.push('/pripadnosti')}
+            className={`items-center justify-center rounded-full ${isLandscape ? 'w-[35px] h-[35px]' : 'w-8 h-8'} bg-white mr-2`}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="stats-chart" size={20} color="black" />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => console.log("Dodaj novo")}
             className={`items-center justify-center rounded-full ${isLandscape ? 'w-[35px] h-[35px]' : 'w-8 h-8'} bg-white mr-4`}
@@ -114,7 +125,10 @@ export default function CategoryDetailScreen() {
                     category: name,
                     id: field.id,
                     name: field.naziv,
-                    slika: field.slika
+                    slika: field.slika,
+                    velicina: field.velicina,
+                    pripadnost: field.pripadnost,
+                    opis: field.opis
                   }
                 })}
                 className={`rounded-2xl overflow-hidden shadow-lg shadow-black/50 bg-white border border-black ${isLandscape ? 'w-[200px]' : 'w-[180px]'}`}
@@ -137,7 +151,7 @@ export default function CategoryDetailScreen() {
                     className={`text-center font-semibold text-black ${isLandscape ? 'text-2xl' : 'text-[25px]'}}`}
                     numberOfLines={1}
                   >
-                    {field.naziv}
+                    {field.naziv} | {field.velicina}ha
                   </Text>
                   {field.opis ? (
                     <Text

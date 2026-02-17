@@ -1,4 +1,6 @@
 export const njiveImages: { [key: string]: any } = {
+      brdo_1: require('./brdo_1.png'),
+      brdo_2: require('./brdo_2.png'),
       brdo_donji_deo: require('./brdo_donji_deo.png'),
       brdo_gornji_deo: require('./brdo_gornji_deo.png'),
       dupla_duz_1: require('./dupla_duz_1.png'),
@@ -14,8 +16,9 @@ export const njiveImages: { [key: string]: any } = {
       prizme: require('./prizme.png'),
       smilje: require('./smilje.png'),
       spic_kod_kudeljare: require('./spic_kod_kudeljare.png'),
-      spic_na_brdu_1: require('./spic_na_brdu_1.png'),
-      spic_na_brdu_2: require('./spic_na_brdu_2.png'),
+      spic_brdo_1: require('./spic_brdo_1.png'),
+      spic_brdo_2: require('./spic_brdo_2.png'),
+      spic_brdo_3: require('./spic_brdo_3.png'),
       vaga: require('./vaga.png'),
       kanal_donji_deo: require('./kanal_donji_deo.png'),
       kanal_gornji_deo: require('./kanal_gornji_deo.png'),
@@ -25,6 +28,6 @@ export const njiveImages: { [key: string]: any } = {
       pustara_spic: require('./pustara_spic.png'),
       vojska_donji_deo: require('./vojska_donji_deo.png'),
       vojska_gornji_deo: require('./vojska_gornji_deo.png'),
-      stadion1: require('./stadion_1.png'),
-      stadion2: require('./stadion_2.png')
+      stadion_1: require('./stadion_1.png'),
+      stadion_2: require('./stadion_2.png')
   };

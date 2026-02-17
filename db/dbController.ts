@@ -17,24 +17,61 @@ export const createTables = async (db: SQLiteDatabase) => {
           naziv TEXT NOT NULL,
           opis TEXT,
           slika TEXT,
+          velicina REAL,
+          pripadnost TEXT,
           kategorija_id INTEGER NOT NULL,
           FOREIGN KEY (kategorija_id) REFERENCES kategorije_njiva(id)
         );
 
+        CREATE TABLE IF NOT EXISTS operacije_njive (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          datum TEXT,
+          vrsta TEXT NOT NULL,
+          traktor TEXT,
+          prik_masina TEXT,
+          potrosnja REAL,
+          radnik TEXT,
+          kolicina REAL,
+          cena REAL,
+          opis TEXT,
+          hemija_id INTEGER,
+          njiva_id INTEGER NOT NULL,
+          FOREIGN KEY (hemija_id) REFERENCES hemije(id),
+          FOREIGN KEY (njiva_id) REFERENCES njive(id)
+        );
+
+        CREATE TABLE IF NOT EXISTS hemije (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          naziv TEXT NOT NULL,
+          kolicina_litara REAL NOT NULL DEFAULT 0,
+          cena_po_litri REAL NOT NULL DEFAULT 0
+        );
+
+        CREATE TABLE IF NOT EXISTS prihodi_njive (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          datum TEXT NOT NULL,
+          izvor TEXT,
+          iznos REAL,
+          njiva_id INTEGER NOT NULL,
+          FOREIGN KEY (njiva_id) REFERENCES njive(id)
+        );
    
       `);
     } catch (error) {
       console.log("Creating tables error: " + error)
     }
-  };
+};
 
 export const rollbackTables = async (db: SQLiteDatabase) => {
     console.log("Rollback tables...");
     await db.execAsync(`
         DROP TABLE IF EXISTS kategorije_njiva;
         DROP TABLE IF EXISTS njive;
+        DROP TABLE IF EXISTS operacije_njive;
+        DROP TABLE IF EXISTS hemije;
+        DROP TABLE IF EXISTS prihodi_njive;
     `);
-  };
+};
 
 export const addFarmingFieldCategory = async (db: SQLiteDatabase) => {
   try {
@@ -79,116 +116,152 @@ export const addFarmingFieldCategory = async (db: SQLiteDatabase) => {
   }
 };
 
-
 export const addFarmingFieldFarma = async (db: SQLiteDatabase) => {
   try {
     const fields = [
-      {
-        naziv: 'Brdo Donji Deo',
-        opis: 'Brdo',
-        slika: 'brdo_donji_deo',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Brdo Gornji Deo',
-        opis: 'Brdo',
-        slika: 'brdo_gornji_deo',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Dupla Duž 1',
-        opis: 'Duž',
-        slika: 'dupla_duz_1',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Dupla Duž 2',
-        opis: 'Duž',
-        slika: 'dupla_duz_2',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Džep',
-        opis: 'Džep',
-        slika: 'dzep',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Iza Farme 1',
-        opis: 'Iza Farme',
-        slika: 'iza_farme_1',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Iza Farme 2',
-        opis: 'Iza Farme',
-        slika: 'iza_farme_2',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Iza Farme 3',
-        opis: 'Iza Farme',
-        slika: 'iza_farme_3',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Između Kanala',
-        opis: 'Iza Farme',
-        slika: 'izmedju_kanala',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Iznad Smilja',
-        opis: 'Smilje',
-        slika: 'iznad_smilja',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Kudeljara',
-        opis: 'Kudeljara',
-        slika: 'kudeljara',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Špic kod Kudeljare',
-        opis: 'Smilje',
-        slika: 'spic_kod_kudeljare',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Preko puta Smilja',
-        opis: 'Smilja',
-        slika: 'preko_puta_smilja',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Prizme',
-        opis: 'Prizme',
-        slika: 'prizme',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Smilje',
-        opis: 'Smilje',
-        slika: 'smilje',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Špic na Brdu 1',
-        opis: 'Špic na Brdu',
-        slika: 'spic_na_brdu_1',
-        kategorija_id: 1
-      },
-      {
-        naziv: 'Špic na Brdu 2',
-        opis: 'Špic na Brdu',
-        slika: 'spic_na_brdu_2',
-        kategorija_id: 1
-      },
+    // 1
       {
         naziv: 'Vaga',
-        opis: 'Vaga',
+        opis: '5502/2 KLAS',
         slika: 'vaga',
+        velicina: 2.4,
+        pripadnost: "KLAS",
+        kategorija_id: 1
+      },
+      // 2 
+      {
+        naziv: 'Kudeljara',
+        opis: '5502/2 KLAS',
+        slika: 'kudeljara',
+        velicina: 9.2,
+        pripadnost: "KLAS",
+        kategorija_id: 1
+      },
+      // 3
+      {
+        naziv: 'Prizme',
+        opis: '5502/2 KLAS',
+        slika: 'prizme',
+        velicina: 1.23,
+        pripadnost: "KLAS",
+        kategorija_id: 1
+      },
+      // 4
+      {
+        naziv: 'Špic kod Kudeljare',
+        opis: '5715 KLAS',
+        slika: 'spic_kod_kudeljare',
+        velicina: 3.1,
+        pripadnost: "KLAS",
+        kategorija_id: 1
+      },
+      // 5
+      {
+        naziv: 'Smilje',
+        opis: '3556 Finagro',
+        slika: 'smilje',
+        velicina: 9.9,
+        pripadnost: "Finagro",
+        kategorija_id: 1
+      },
+      // 6
+      {
+        naziv: 'Preko puta Smilja',
+        opis: '3608 KLAS',
+        slika: 'preko_puta_smilja',
+        velicina: 10.9,
+        pripadnost: "KLAS",
+        kategorija_id: 1
+      },
+      // 7
+      {
+        naziv: 'Iznad Smilja',
+        opis: '3556 Finagro',
+        slika: 'iznad_smilja',
+        velicina: 31.1,
+        pripadnost: "Finagro",
+        kategorija_id: 1
+      },
+      // 8
+      {
+        naziv: 'Između Kanala',
+        opis: '3608 KLAS',
+        slika: 'izmedju_kanala',
+        velicina: 22.9,
+        pripadnost: "KLAS",
+        kategorija_id: 1
+      },
+
+      // 9
+      {
+        naziv: 'Brdo 1',
+        opis: '3556 Finagro',
+        slika: 'brdo_2',
+        velicina: 25.7,
+        pripadnost: "Finagro",
+        kategorija_id: 1
+      },
+      // 10
+      {
+        naziv: 'Brdo 2',
+        opis: '3608 KLAS',
+        slika: 'brdo_1',
+        velicina: 41.7,
+        pripadnost: "KLAS",
+        kategorija_id: 1
+      },
+      // 11
+      {
+        naziv: 'Špic na Brdu 1',
+        opis: '3537 Savo',
+        slika: 'spic_brdo_1',
+        velicina: 11,
+        pripadnost: "Savo",
+        kategorija_id: 1
+      },
+      // 12
+      {
+        naziv: 'Špic na Brdu 2',
+        opis: '3538 Nikola',
+        slika: 'spic_brdo_2',
+        velicina: 11.9,
+        pripadnost: "Nikola",
+        kategorija_id: 1
+      },
+      // 13
+      {
+        naziv: 'Špic na Brdu 3',
+        opis: '3675 KLAS',
+        slika: 'spic_brdo_3',
+        velicina: 12,
+        pripadnost: "KLAS",
+        kategorija_id: 1
+      },
+      // 14
+      {
+        naziv: 'Iza Farme 1',
+        opis: '3467 KLAS',
+        slika: 'iza_farme_1',
+        velicina: 10,
+        pripadnost: "KLAS",
+        kategorija_id: 1
+      },
+      // 15
+      {
+        naziv: 'Iza Farme 2',
+        opis: '3467 KLAS',
+        slika: 'iza_farme_2',
+        velicina: 20,
+        pripadnost: "KLAS",
+        kategorija_id: 1
+      },
+      // 16
+      {
+        naziv: 'Iza Farme 3',
+        opis: '3467 KLAS',
+        slika: 'iza_farme_3',
+        velicina: 25,
+        pripadnost: "KLAS",
         kategorija_id: 1
       },
     ];
@@ -201,8 +274,8 @@ export const addFarmingFieldFarma = async (db: SQLiteDatabase) => {
 
       if (exists.length === 0) {
         await db.runAsync(
-          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
-          [field.naziv, field.opis, field.slika, field.kategorija_id]
+          'INSERT INTO njive (naziv, opis, slika, velicina, pripadnost, kategorija_id) VALUES (?, ?, ?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.velicina ?? null, field.pripadnost ?? null, field.kategorija_id]
         );
       }
     }
@@ -216,17 +289,14 @@ export const addFarmingFieldKanal = async (db: SQLiteDatabase) => {
   try {
     const fields = [
       {
-        naziv: 'Kanal Donji Deo',
-        opis: 'Kanal',
+        naziv: 'Kanal',
+        opis: '2606 KLAS',
         slika: 'kanal_donji_deo',
+        velicina: 18.5,
+        pripadnost: "KLAS",
         kategorija_id: 2
       },
-      {
-        naziv: 'Kanal Gornji Deo',
-        opis: 'Kanal',
-        slika: 'kanal_gornji_deo',
-        kategorija_id: 2
-      }
+
     ];
 
     for (const field of fields) {
@@ -237,8 +307,8 @@ export const addFarmingFieldKanal = async (db: SQLiteDatabase) => {
 
       if (exists.length === 0) {
         await db.runAsync(
-          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
-          [field.naziv, field.opis, field.slika, field.kategorija_id]
+          'INSERT INTO njive (naziv, opis, slika, velicina, pripadnost, kategorija_id) VALUES (?, ?, ?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.velicina ?? null, field.pripadnost ?? null, field.kategorija_id]
         );
       }
     }
@@ -252,9 +322,19 @@ export const addFarmingFieldPadina = async (db: SQLiteDatabase) => {
   try {
     const fields = [
       {
-        naziv: 'Padina',
-        opis: 'Padina',
+        naziv: 'Padina Finagro',
+        opis: '4999 - 5502 Finagro',
         slika: 'padina',
+        velicina: 4.19,
+        pripadnost: "Finagro",
+        kategorija_id: 3
+      },
+      {
+        naziv: 'Padina Dusan',
+        opis: '5003 - 5015 Dusan',
+        slika: 'padina',
+        velicina: 35.81,
+        pripadnost: "Dusan",
         kategorija_id: 3
       },
     ];
@@ -267,8 +347,8 @@ export const addFarmingFieldPadina = async (db: SQLiteDatabase) => {
 
       if (exists.length === 0) {
         await db.runAsync(
-          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
-          [field.naziv, field.opis, field.slika, field.kategorija_id]
+          'INSERT INTO njive (naziv, opis, slika, velicina, pripadnost, kategorija_id) VALUES (?, ?, ?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.velicina ?? null, field.pripadnost ?? null, field.kategorija_id]
         );
       }
     }
@@ -283,20 +363,26 @@ export const addFarmingFieldPustara = async (db: SQLiteDatabase) => {
     const fields = [
       {
         naziv: 'Pustara Donji Deo',
-        opis: 'Pustara',
+        opis: '4598 Finagro',
         slika: 'pustara_donji_deo',
+        velicina: 36.6,
+        pripadnost: "Finagro",
         kategorija_id: 4
       },
       {
         naziv: 'Pustara Gornji Deo',
-        opis: 'Pustara',
+        opis: '4628 Finagro',
         slika: 'pustara_gornji_deo',
+        velicina: 16.9,
+        pripadnost: "Finagro",
         kategorija_id: 4
       },
       {
         naziv: 'Pustara Špic',
-        opis: 'Pustara',
+        opis: '4588 KLAS',
         slika: 'pustara_spic',
+        velicina: 10.8,
+        pripadnost: "KLAS",
         kategorija_id: 4
       }
     ];
@@ -309,8 +395,8 @@ export const addFarmingFieldPustara = async (db: SQLiteDatabase) => {
 
       if (exists.length === 0) {
         await db.runAsync(
-          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
-          [field.naziv, field.opis, field.slika, field.kategorija_id]
+          'INSERT INTO njive (naziv, opis, slika, velicina, pripadnost, kategorija_id) VALUES (?, ?, ?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.velicina ?? null, field.pripadnost ?? null, field.kategorija_id]
         );
       }
     }
@@ -325,14 +411,18 @@ export const addFarmingFieldVojska = async (db: SQLiteDatabase) => {
     const fields = [
       {
         naziv: 'Vojska Donji Deo',
-        opis: 'Donji deo parcele Vojska',
+        opis: '1600, 1674/2 KLAS',
         slika: 'vojska_donji_deo',
+        velicina: 1.92,
+        pripadnost: "KLAS",
         kategorija_id: 5
       },
       {
         naziv: 'Vojska Gornji Deo',
-        opis: 'Gornji deo parcele Vojska',
+        opis: '1698 KLAS',
         slika: 'vojska_gornji_deo',
+        velicina: 3,
+        pripadnost: "KLAS",
         kategorija_id: 5
       }
     ];
@@ -345,8 +435,8 @@ export const addFarmingFieldVojska = async (db: SQLiteDatabase) => {
 
       if (exists.length === 0) {
         await db.runAsync(
-          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
-          [field.naziv, field.opis, field.slika, field.kategorija_id]
+          'INSERT INTO njive (naziv, opis, slika, velicina, pripadnost, kategorija_id) VALUES (?, ?, ?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.velicina ?? null, field.pripadnost ?? null, field.kategorija_id]
         );
       }
     }
@@ -361,14 +451,18 @@ export const addFarmingFieldStadion = async (db: SQLiteDatabase) => {
     const fields = [
       {
         naziv: 'Stadion 1',
-        opis: 'Stadion',
+        opis: '5412 KLAS',
         slika: 'stadion_1',
+        velicina: 13.7,
+        pripadnost: "KLAS",
         kategorija_id: 6
       },
       {
         naziv: 'Stadion 2',
-        opis: 'Stadion',
+        opis: '5404 KLAS',
         slika: 'stadion_2',
+        velicina: 16.6,
+        pripadnost: "KLAS",
         kategorija_id: 6
       }
     ];
@@ -381,13 +475,78 @@ export const addFarmingFieldStadion = async (db: SQLiteDatabase) => {
 
       if (exists.length === 0) {
         await db.runAsync(
-          'INSERT INTO njive (naziv, opis, slika, kategorija_id) VALUES (?, ?, ?, ?)',
-          [field.naziv, field.opis, field.slika, field.kategorija_id]
+          'INSERT INTO njive (naziv, opis, slika, velicina, pripadnost, kategorija_id) VALUES (?, ?, ?, ?, ?, ?)',
+          [field.naziv, field.opis, field.slika, field.velicina ?? null, field.pripadnost ?? null, field.kategorija_id]
         );
       }
     }
   } catch (error) {
     console.error('Greška pri dodavanju njiva:', error);
     throw error;
+  }
+};
+
+/**
+ * Migration: add cena_po_litri column to hemije table if it doesn't exist.
+ */
+export const migrateHemijeCena = async (db: SQLiteDatabase) => {
+  try {
+    const columns = await db.getAllAsync<{ name: string }>(
+      `PRAGMA table_info(hemije)`
+    );
+    const hasCena = columns.some(c => c.name === 'cena_po_litri');
+    if (!hasCena) {
+      await db.execAsync(`ALTER TABLE hemije ADD COLUMN cena_po_litri REAL NOT NULL DEFAULT 0`);
+      console.log('Migration: cena_po_litri column added to hemije.');
+    }
+  } catch (error) {
+    console.error('Error migrating hemije cena:', error);
+  }
+};
+
+/**
+ * Backfill pripadnost for existing rows that have NULL pripadnost.
+ * Maps each field name to its correct pripadnost value.
+ */
+export const backfillPripadnost = async (db: SQLiteDatabase) => {
+  const mapping: Record<string, string> = {
+    'Vaga': 'KLAS',
+    'Kudeljara': 'KLAS',
+    'Prizme': 'KLAS',
+    'Špic kod Kudeljare': 'KLAS',
+    'Smilje': 'Finagro',
+    'Preko puta Smilja': 'KLAS',
+    'Iznad Smilja': 'Finagro',
+    'Između Kanala': 'KLAS',
+    'Brdo 1': 'Finagro',
+    'Brdo 2': 'KLAS',
+    'Špic na Brdu 1': 'Savo',
+    'Špic na Brdu 2': 'Nikola',
+    'Špic na Brdu 3': 'KLAS',
+    'Iza Farme 1': 'KLAS',
+    'Iza Farme 2': 'KLAS',
+    'Iza Farme 3': 'KLAS',
+    'Kanal': 'KLAS',
+    'Padina Finagro': 'Finagro',
+    'Padina Dusan': 'Dusan',
+    'Pustara Donji Deo': 'Finagro',
+    'Pustara Gornji Deo': 'Finagro',
+    'Pustara Špic': 'KLAS',
+    'Vojska Donji Deo': 'KLAS',
+    'Vojska Gornji Deo': 'KLAS',
+    'Stadion 1': 'KLAS',
+    'Stadion 2': 'KLAS',
+  };
+
+  try {
+    for (const [naziv, pripadnost] of Object.entries(mapping)) {
+      await db.runAsync(
+        'UPDATE njive SET pripadnost = ? WHERE naziv = ? AND (pripadnost IS NULL OR pripadnost = ?)',
+        [pripadnost, naziv, '']
+      );
+    }
+    console.log('Pripadnost backfill complete.');
+  } catch (error) {
+    console.error('Error backfilling pripadnost:', error);
   }
 };

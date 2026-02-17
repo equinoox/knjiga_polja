@@ -4,13 +4,13 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { useCallback, useState } from 'react';
 import { Image, ScrollView, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import MagacinButton from '../components/magacin-button';
 // import finagroLogo from '../assets/finagro_logo.png';
 
 type FieldCategory = {
   id: number;
   naziv: string;
 };
-
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -78,6 +78,14 @@ export default function HomeScreen() {
             </View>
           </View>
 
+          <MagacinButton isLandscape={isLandscape} />
+          <TouchableOpacity
+            onPress={() => router.push('/pripadnosti')}
+            className={`items-center justify-center rounded-full ${isLandscape ? 'w-[35px] h-[35px]' : 'w-8 h-8'} bg-white mr-2`}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="stats-chart" size={20} color="black" />
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => console.log("Dodaj novo")}
             className={`items-center justify-center rounded-full ${isLandscape ? 'w-[35px] h-[35px]' : 'w-8 h-8'} bg-white mr-4`}
@@ -114,7 +122,7 @@ export default function HomeScreen() {
                 activeOpacity={0.7}
               >
                 <View
-                  className={`rounded-2xl overflow-hidden shadow-md shadow-black/10 bg-white border border-black ${isLandscape ? 'w-[200px]' : 'w-[180px]'}`}
+                  className={`rounded-2xl overflow-hidden shadow-md shadow-black/10 bg-white border-2 border-black ${isLandscape ? 'w-[200px]' : 'w-[180px]'}`}
                 >
                   {/* Gornji deo - Slika */}
                   <View className={`items-center justify-center bg-green-800 ${isLandscape ? 'h-[173px]' : 'h-[126px]'}`}>
